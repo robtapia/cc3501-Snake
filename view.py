@@ -36,6 +36,9 @@ if __name__ == '__main__' :
 
     controlador.set_snake(snake)
 
+    glEnable(GL_BLEND)
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
 
     while not glfw.window_should_close(window):
         glfw.poll_events()
