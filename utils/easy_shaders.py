@@ -9,7 +9,7 @@ import OpenGL.GL.shaders
 import numpy as np
 from PIL import Image
 
-import basic_shapes as bs
+import utils.basic_shapes as bs
 
 # We will use 32 bits data, so an integer has 4 bytes
 # 1 byte = 8 bits
