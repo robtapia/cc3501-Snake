@@ -13,7 +13,7 @@ import numpy as np
 from random import randint
 
 class Snake(object):
-    def __init__(self):
+    def __init__(self,grilla):
         self.piezas = [(0,0)]
         self.maxLength = 2
         self.nodo = es.toGPUShape(bs.createColorQuad(0,0,0))
@@ -22,10 +22,11 @@ class Snake(object):
         self.grafo = sg.SceneGraphNode('snake')
         self.speed=10
         self.muerto = False
-        self.grilla = 10
+        self.grilla = grilla
         self.contador = 0
         self.manzana = (2,2)
         self.manzanaShape = es.toGPUShape(bs.createColorQuad(1,0,0))
+        self.hasChangedDirection = False
 
         
         
@@ -119,7 +120,9 @@ class Snake(object):
     def move(self):
         self.contador+=1
         if self.contador %20 ==0:
+            self.contador = 0
             #time.sleep(1/self.speed)
+            self.hasChangedDirection=False
             print(self.piezas)
             cabeza = self.piezas[0]
             cola = self.piezas[-1]
@@ -142,15 +145,8 @@ class Snake(object):
             #     self.manzana = (randint(-(self.grilla//2),(self.grilla//2)-1),randint(-(self.grilla//2),(self.grilla//2)-1))
 
     def change_direction(self,direccion):
-        if direccion != (-self.direccion[0],self.direccion[1]) and direccion != (self.direccion[0],-self.direccion[1]):
+
+        if not self.hasChangedDirection and direccion != (-self.direccion[0],self.direccion[1]) and direccion != (self.direccion[0],-self.direccion[1]):
             self.direccion = direccion
-        print(self.direccion)
-            
-        
-
-    
-class Apple(object):
-    pass
-
-class AppleCreator(object):
-    pass
+            self.hasChangedDirection = True
+        # print(self.direccion)

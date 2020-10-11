@@ -10,6 +10,7 @@ if __name__ == '__main__' :
     if not glfw.init():
         sys.exit()
     
+    grilla = int(sys.argv[1])
     width = 800
     height = 800
 
@@ -32,7 +33,7 @@ if __name__ == '__main__' :
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
 
-    snake =Snake()
+    snake =Snake(grilla)
 
     controlador.set_snake(snake)
 
