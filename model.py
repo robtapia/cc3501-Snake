@@ -28,21 +28,6 @@ class Snake(object):
         self.manzanaShape = es.toGPUShape(bs.createColorQuad(1,0,0))
         self.hasChangedDirection = False
 
-        
-        
-
-        # cuerpo = sg.SceneGraphNode('cuerpo')
-        # body.transform = tr.uniformScale(1)
-        # body.childs = self.piezas
-
-        # snake = sg.SceneGraphNode('snake')
-        # snake.transform = tr.matmul([tr.uniformScale(2.0/45.0)])
-
-        # snake.childs = [body]
-        # transform_snake = sg.SceneGraphNode('snakeTR')
-        # transform_snake.childs = [snake]
-
-
     def drawFondo(self, pipeline):
         glUseProgram(pipeline.shaderProgram)
         if not self.muerto:
@@ -53,7 +38,6 @@ class Snake(object):
                 fondo.transform = tr.matmul([tr.translate(0,0,0),tr.uniformScale(2-(2*5)/(self.grilla+5))])
             fondoQuad = es.toGPUShape(bs.createColorQuad(1,1,1))
             fondo.childs = [fondoQuad]
-            #glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "transform"), 1, GL_TRUE, fondo.transform)
             sg.drawSceneGraphNode(fondo,pipeline,"transform")
     
     def draw(self, pipeline, pipelineTexturas):
@@ -61,46 +45,24 @@ class Snake(object):
             glUseProgram(pipelineTexturas.shaderProgram)
             glEnable(GL_BLEND)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-            # gameOver = sg.SceneGraphNode('gameOver')
-            # gameOver.transform = tr.identity()
             pantalla = es.toGPUShape(bs.createTextureQuad('gameOver.jpg',1,1),GL_CLAMP_TO_EDGE,GL_LINEAR)
             pantallaTransform = tr2.matmul([tr.uniformScale(2.5),tr2.rotationZ(0.25)])
-            # gameOver.childs = [pantalla]
-            # pipeline = es.SimpleTextureTransformShaderProgram()
             glUniformMatrix4fv(glGetUniformLocation(pipelineTexturas.shaderProgram, "transform"), 1, GL_TRUE, pantallaTransform)
-            # pipelineTexturas.drawShape(pantalla)
             pantalla_node = sg.SceneGraphNode('pantalla')
             pantalla_node.transform = pantallaTransform
             pantalla_node.childs = [pantalla]
             sg.drawSceneGraphNode(pantalla_node,pipelineTexturas,"transform")
-            
-            #self.grafo.childs = [gameOver]
-            
             return
-        
-        # for pieza in self.piezas:
-        #     nodo = sg.SceneGraphNode('nodo')
-        #     #nodo.transform = tr.matmul([tr.translate(0,0,0),tr.uniformScale(2/(self.grilla+4)),tr.translate(pieza[0]+(1/(self.grilla+4)),pieza[1]+(1/(self.grilla+4)),0)])
-        #     nodo.transform = tr.matmul([tr.translate(0,0,0),tr.uniformScale(2/(self.grilla+4)),tr.translate(pieza[0],pieza[1],0)])            
-        #     nodo.childs = [self.nodo]
-        #     #self.grafo.childs += [nodo]
-        #     sg.drawSceneGraphNode(nodo, pipelineTexturas, "transform")
-
+    
         for pieza in self.piezas:
             glUseProgram(pipelineTexturas.shaderProgram)
-            
-            # gameOver = sg.SceneGraphNode('gameOver')
-            # gameOver.transform = tr.identity()
-            #snake = es.toGPUShape(bs.createTextureQuad('untitle.png',1,1),GL_CLAMP_TO_EDGE,GL_LINEAR)
             if self.grilla%2 != 0:
                 snakeTransform = tr.matmul([tr.translate(0,0,0),tr.uniformScale(2/(self.grilla+4)),tr.translate(pieza[0],pieza[1],0)])
             else :
                 snakeTransform = tr.matmul([tr.translate(1/(self.grilla+5),1/(self.grilla+5),0),tr.uniformScale(2/(self.grilla+5)),tr.translate(pieza[0],pieza[1],0)])
 
-            # gameOver.childs = [pantalla]
-            # pipeline = es.SimpleTextureTransformShaderProgram()
             glUniformMatrix4fv(glGetUniformLocation(pipelineTexturas.shaderProgram, "transform"), 1, GL_TRUE, snakeTransform)
-            # pipelineTexturas.drawShape(pantalla)
+
             snake_node = sg.SceneGraphNode('nodo')
             snake_node.transform = snakeTransform
             snake_node.childs = [self.snakeTextura]
@@ -121,7 +83,6 @@ class Snake(object):
         self.contador+=1
         if self.contador %20 ==0:
             self.contador = 0
-            #time.sleep(1/self.speed)
             self.hasChangedDirection=False
             print(self.piezas)
             cabeza = self.piezas[0]
@@ -140,13 +101,9 @@ class Snake(object):
                 while self.manzana in self.piezas:
                     self.manzana = (randint(-(self.grilla//2),(self.grilla//2)-1),randint(-(self.grilla//2),(self.grilla//2)-1))
 
-            # if nueva_cabeza == self.manzana:
-            #     self.maxLength +=1
-            #     self.manzana = (randint(-(self.grilla//2),(self.grilla//2)-1),randint(-(self.grilla//2),(self.grilla//2)-1))
-
     def change_direction(self,direccion):
 
         if not self.hasChangedDirection and direccion != (-self.direccion[0],self.direccion[1]) and direccion != (self.direccion[0],-self.direccion[1]):
             self.direccion = direccion
             self.hasChangedDirection = True
-        # print(self.direccion)
+        
